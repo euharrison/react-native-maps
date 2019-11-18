@@ -17,10 +17,15 @@ android {
 }
 
 dependencies {
-  def supportLibVersion = safeExtGet('supportLibVersion', '28.0.0')
-  def supportLibMajorVersion = supportLibVersion.split('\\.')[0] as int
-  def appCompatLibName =  (supportLibMajorVersion < 20) ? "androidx.appcompat:appcompat" : "com.android.support:appcompat-v7"
-  implementation "$appCompatLibName:$supportLibVersion"
+  def appCompatVersion = safeExtGet('appCompatVersion', null)
+  if (appCompatVersion != null) {
+    implementation "androidx.appcompat:appcompat:$appCompatVersion"
+  } else {
+    def supportLibVersion = safeExtGet('supportLibVersion', '28.0.0')
+    def supportLibMajorVersion = supportLibVersion.split('\\.')[0] as int
+    def appCompatLibName =  (supportLibMajorVersion < 20) ? "androidx.appcompat:appcompat" : "com.android.support:appcompat-v7"
+    implementation "$appCompatLibName:$supportLibVersion"
+  }
   implementation('com.facebook.react:react-native:+') {
     exclude group: 'com.android.support'
   }
